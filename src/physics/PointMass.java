@@ -3,10 +3,12 @@ package physics;
 import com.sun.javafx.geom.AreaOp;
 import com.sun.javafx.geom.Vec3f;
 
+import java.util.List;
+
 public class PointMass {
 
-    public float mass = 2f;
-    public Vec3f position = new Vec3f(1f,0f,0f);
+    public float mass = 10f;
+    public Vec3f position = new Vec3f(0.1f,0f,0f);
     public Vec3f velocity= new Vec3f(0f,0f,0f);
     public Vec3f force= new Vec3f(0f,0f,0f);
     public Vec3f gravity= new Vec3f(0f,-9.8f,0f);
@@ -27,8 +29,12 @@ public class PointMass {
         return force;
     }
 
+    public void addForce(Vec3f force) {
+        this.force.add(force);
+    }
+
     public void setForce(Vec3f force) {
-        this.force = force;
+        this.force=force;
     }
 
     public float getMass() {
@@ -53,11 +59,15 @@ public class PointMass {
 
 
     public void update(float dt) {
+        CalculateForces();
         calculateVelocity(dt);
         this.position.add(mult(this.velocity,dt));
+//        float te= (float) (0.5*this.mass*Math.pow(length(this.velocity),2f)+ this.mass* length(gravity)* this.position.z);
+//        System.out.print("energy ");
+//        System.out.println(te);
     }
 
-    public Vec3f mult(Vec3f V, float f){
+    public static Vec3f mult(Vec3f V, float f){
         Vec3f v = new Vec3f(V.x,V.y,V.z);
         v.x = f*v.x;
         v.y= f*v.y;
@@ -66,17 +76,18 @@ public class PointMass {
     }
 
     public void CalculateForces(){
-        //Vec3f Totalforce = new Vec3f();
+//        Vec3f Totalforce = new Vec3f();
+
         Vec3f gravon= mult(this.gravity,this.mass);
         this.force.add(gravon);
-        //Totalforce.add(force)
+//        Totalforce.add(force);
     }
 
-     public float length(Vec3f vec){
-         System.out.print("a ");
+     public static float length(Vec3f vec){
+//         System.out.print("a ");
 
          float dist = (float) Math.sqrt(Math.pow(vec.x,2)+ Math.pow(vec.y,2)+ Math.pow(vec.z,2));
-         System.out.println(dist);
+//         System.out.println(dist);
         return (float) dist;
     }
 
@@ -84,9 +95,11 @@ public class PointMass {
 
     public void calculateVelocity(float dt){
 
-        CalculateForces();
+//        CalculateForces();
+//        setVelocity();
         Vec3f change = mult(this.force,dt/this.mass);
         this.velocity.add(change);
+
 
     }
 
